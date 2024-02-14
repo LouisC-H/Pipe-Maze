@@ -11,7 +11,7 @@ public class PipeMap {
 
     private Pipe sPipe;
 
-    private boolean recursionBroken;
+    private boolean recursionBroken = false;
     private Pipe recursionStorePipe;
     private char recursionStoreDirection;
     private int numRecursionBreaks;
@@ -71,11 +71,21 @@ public class PipeMap {
     }
 
     private int manageRecursion(char direction) {
-        int recursionEnd = sPipe.getUConnection().moveThroughPipes(direction, 0);
+        int recursionEnd = 0;
+        switch (direction) {
+            case 'u' -> recursionEnd = sPipe.getUConnection().moveThroughPipes(direction, 0);
+            case 'd' -> recursionEnd = sPipe.getDConnection().moveThroughPipes(direction, 0);
+            case 'l' -> recursionEnd = sPipe.getLConnection().moveThroughPipes(direction, 0);
+            case 'r' -> recursionEnd = sPipe.getRConnection().moveThroughPipes(direction, 0);
+            default -> System.out.println("Direction not recognised");
+        }
+        // while loop allows the recursion to break and be re-launched
         while (recursionBroken){
             recursionBroken = false;
-            recursionStorePipe.moveThroughPipes(recursionStoreDirection, 0);
+            recursionEnd = recursionStorePipe.moveThroughPipes(recursionStoreDirection, -1);
         }
+        System.out.println(recursionEnd);
+        System.out.println( numRecursionBreaks);
         return recursionEnd + 5000 * numRecursionBreaks;
     }
 
@@ -84,16 +94,7 @@ public class PipeMap {
         this.recursionBroken = true;
         this.recursionStorePipe = pipe;
         this.recursionStoreDirection = direction;
-        System.out.println(Arrays.toString(pipe.getPosition()));
+//        System.out.println(Arrays.toString(pipe.getPosition()));
         numRecursionBreaks++;
-    }
-
-    // Util
-    private boolean isValidPosition(int row, int col){
-        if(col >= 0 && row >= 0 && col < rowCount && row < colCount) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
