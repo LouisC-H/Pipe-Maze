@@ -7,11 +7,12 @@ public class Main {
     {
 
         String filename = "src/main/resources/input.txt";
-        System.out.println(runDay10Code(filename));
+//        System.out.println(runDay10CodeP1(filename));
+        System.out.println(runDay10CodeP2(filename));
 
     }
 
-    public static int runDay10Code(String filename){
+    public static int runDay10CodeP1(String filename){
 
         File inputFile = new File(filename);
 
@@ -61,5 +62,19 @@ public class Main {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public static int runDay10CodeP2(String filename){
+
+        File inputFile = new File(filename);
+
+        PipeMap pipeMap = initialisePipeMap(inputFile);
+
+        populatePipeMap(inputFile, pipeMap);
+
+        pipeMap.probePipeS();
+
+        return pipeMap.getInsideArea();
+
     }
 }
